@@ -1,0 +1,23 @@
+﻿@using Lab12Logic
+@inject NavigationManager navManager
+
+@if(Game.Instance.Player2 is null)
+{
+   <input @bind=newPlayerName placeholder="Your Name" />
+   <button @onclick=joinGame>Join Game</button>
+}
+else
+{
+   <p>Sorry, looks like the game is full</p>
+   <p>@Game.Instance.Player1.Name is already playing @Game.Instance.Player2.Name</p>
+}
+
+@code {
+    string newPlayerName;
+
+    void joinGame()
+    {
+        Game.Instance.Join(new Player(newPlayerName));
+        navManager.NavigateTo($"/play?playerName={newPlayerName}");
+    }
+}

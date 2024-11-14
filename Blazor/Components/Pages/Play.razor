@@ -1,0 +1,40 @@
+@page "/play"
+@using Lab12Logic
+@inject NavigationManager navManager
+
+@if (me is null)
+{
+   <div>There is no player @PlayerName</div>
+}
+else if(game.IsGameOver)
+{
+   <h3>Game Over</h3>
+}
+else //we're playing
+{
+   <h3>Play for @me.Name</h3>    
+}   
+
+@code {
+    Game game = Game.Instance;
+    Player? me;
+    Player? other;
+    List<string> errors = new();
+
+    [SupplyParameterFromQuery] //Note(1)
+    public string PlayerName { get; set; }
+
+    protected override void OnParametersSet() //Note(2)
+    {
+        if (game.Player1?.Name == PlayerName)
+        {
+            me = game.Player1;
+        }
+        else if (game.Player2?.Name == PlayerName)
+        {
+            me = game.Player2;
+        }
+        other = game.Player1 == me ? game.Player2 : game.Player1;
+        errors.Clear();
+    }
+}
